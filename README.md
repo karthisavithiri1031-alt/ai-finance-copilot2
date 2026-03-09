@@ -1,3 +1,4 @@
+
 # AI Finance Copilot 🚀
 
 > A production-grade AI-powered personal finance platform — manage money through natural conversation, analytics dashboards, and automated insights.
@@ -188,3 +189,7 @@ docker-compose up -d
 - Multi-currency support
 - Smart savings goals
 - Mobile app (React Native)
+=======
+# ai-finance-copilot2
+AI Finance Copilot – An intelligent expense tracking and financial insights platform with AI chat, budgeting, analytics, and real-time expense management built using Next.js, Node.js, and PostgreSQL.
+
