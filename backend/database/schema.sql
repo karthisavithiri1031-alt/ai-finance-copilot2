@@ -1,0 +1,57 @@
+-- AI Finance Copilot Database Schema
+
+DROP TABLE IF EXISTS ai_insights;
+DROP TABLE IF EXISTS subscriptions;
+DROP TABLE IF EXISTS budgets;
+DROP TABLE IF EXISTS expenses;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE expenses (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  amount DECIMAL(10,2) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  merchant VARCHAR(255) NOT NULL DEFAULT '',
+  date DATE NOT NULL,
+  description TEXT DEFAULT '',
+  payment_method VARCHAR(50) DEFAULT 'card',
+  currency VARCHAR(10) DEFAULT 'USD',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE budgets (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  category VARCHAR(100) NOT NULL,
+  limit_amount DECIMAL(10,2) NOT NULL,
+  month INTEGER DEFAULT EXTRACT(MONTH FROM CURRENT_DATE),
+  year INTEGER DEFAULT EXTRACT(YEAR FROM CURRENT_DATE)
+);
+
+CREATE TABLE subscriptions (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  merchant VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  billing_cycle VARCHAR(50) DEFAULT 'monthly',
+  detected_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ai_insights (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  insight_text TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for performance
+CREATE INDEX idx_expenses_user_id ON expenses(user_id);
+CREATE INDEX idx_expenses_date ON expenses(date);
+CREATE INDEX idx_budgets_user_id ON budgets(user_id);
